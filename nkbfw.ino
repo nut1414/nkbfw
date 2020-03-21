@@ -2,11 +2,9 @@
 #include <Keyboard.h>
 #include <Bounce2.h>
 
-
 //key count
 #define KEYCOUNT 10
-
-//default key
+//default key change your key binding here
 #define K1 'A'
 #define K2 'B'
 #define K3 'C'
@@ -37,12 +35,15 @@ int i;
 Bounce button[KEYCOUNT];
 
 void setup() {
+ 
+ //planned feature
  //check if never been started before
+ 
  /*
  if(EEPROM.read(1023)!= 1);
  {
   
- }
+ }                     
  */
  //attach bounce
   for (i = 0; i < KEYCOUNT; i++) {
@@ -67,6 +68,9 @@ for(i=0;i<KEYCOUNT;i++)
   button[i].update();
   }
 
+  //not beautiful ie. bruteforce way
+  //could probably use another loop w/ and array would definetly look tidier
+  //too lazy for data struct :P
   
   if (button[0].fell()){
     Keyboard.press(K1);
