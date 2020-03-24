@@ -8,7 +8,10 @@
 //configuration
 #define TURNONLED FALSE
 #define TURNONINBUILTLED FALSE
+
+#define STARTSERIAL FALSE
 #define KEYCOUNT 10
+
 
 //default key 
 //change your key binding here
@@ -45,7 +48,7 @@ char key[KEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
 int i;
 int j;
 Bounce button[KEYCOUNT];
-
+void setup(){
 //option to disable inbuilt led
  #if TURNONINBUILTLED == FALSE
  pinMode(LED_BUILTIN_TX,INPUT);
@@ -80,8 +83,10 @@ Bounce button[KEYCOUNT];
   }
 
 //start the serial
+#if STARTSERIAL == TRUE
 Serial.begin(9600);
-pinMode(1,INPUT);
+#endif
+
 }
 
 void loop() {
