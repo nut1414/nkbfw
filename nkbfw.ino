@@ -6,7 +6,7 @@
 #include <Bounce2.h>
 
 //configuration
-#define TURNONLED FALSE
+#define TURNONLED FALSE //OR TRUE (in capital letter)
 #define TURNONINBUILTLED FALSE
 
 #define STARTSERIAL FALSE
