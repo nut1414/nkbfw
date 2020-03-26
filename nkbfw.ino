@@ -15,6 +15,10 @@
 
 //default key 
 //change your key binding here
+//if modifier key
+//ex: #define K1 KEY_DOWN_ARROW
+//if normal key
+//ex: #define K1 'F'
 #define K1 '1'
 #define K2 '2'
 #define K3 '3'
@@ -42,7 +46,7 @@
 CRGB leds[1];
 byte pin[KEYCOUNT]={P1,P2,P3,P4,P5,P6,P7,P8,P9,P10};
 //making things tidier                  
-char key[KEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
+byte key[KEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
     
 //bool test;
 int i;
