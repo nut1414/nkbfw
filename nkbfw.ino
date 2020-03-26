@@ -41,8 +41,8 @@
 
 CRGB leds[1];
 byte pin[KEYCOUNT]={P1,P2,P3,P4,P5,P6,P7,P8,P9,P10};
-//making things tidier, not                  
-//char fKEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
+//making things tidier                  
+char key[KEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
     
 //bool test;
 int i;
@@ -93,77 +93,15 @@ void loop() {
 for(i=0;i<KEYCOUNT;i++)
   {
   button[i].update();
- 
-  } 
-  if (button[0].fell()){
-    Keyboard.press(K1);
+  if (button[i].fell()){
+    Keyboard.press(key[i]);
+
   }
-  if (button[0].rose()){
-    Keyboard.release(K2);
+  if (button[i].rose()){
+    Keyboard.release(key[i]);
     
-  }
-  if (button[1].fell()){
-    Keyboard.press(K2);
-  }
-  if (button[1].rose()){
-    Keyboard.release(K2);
-    
-  }
- if (button[2].fell()){
-    Keyboard.press(K3);
-  }
-  if (button[2].rose()){
-    Keyboard.release(K3);
-    
-  }
-  if (button[3].fell()){
-    Keyboard.press(K4);
-  }
-  if (button[3].rose()){
-    Keyboard.release(K4);
-    
-  }
-  if (button[4].fell()){
-    Keyboard.press(K5);
-  }
-  if (button[4].rose()){
-    Keyboard.release(K5);
-    
-  }
-  if (button[5].fell()){
-    Keyboard.press(K6);
-  }
-  if (button[5].rose()){
-    Keyboard.release(K6);
-    
-  }
-  if (button[6].fell()){
-    Keyboard.press(K7);
-  }
-  if (button[6].rose()){
-    Keyboard.release(K7);
-    
-  }
-  if (button[7].fell()){
-    Keyboard.press(K8);
-  }
-  if (button[7].rose()){
-    Keyboard.release(K8);
-    
-  }
-  if (button[8].fell()){
-    Keyboard.press(K9);
-  }
-  if (button[8].rose()){
-    Keyboard.release(K9);
-    
-  }
-  if (button[9].fell()){
-    Keyboard.press(K10);
-  }
-  if (button[9].rose()){
-    Keyboard.release(K10);
-    
-  }
   
+  }
+  }
+ 
 }
