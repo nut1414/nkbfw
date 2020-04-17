@@ -9,7 +9,7 @@
 #define TURNONLED FALSE //OR TRUE (in capital letter)
 #define TURNONINBUILTLED FALSE
 
-#define STARTSERIAL FALSE
+#define STARTSERIAL TRUE
 #define KEYCOUNT 10
 
 
@@ -44,9 +44,9 @@
 #define P10 10
 
 CRGB leds[1];
-byte pin[KEYCOUNT]={P1,P2,P3,P4,P5,P6,P7,P8,P9,P10};
+byte pin[]={P1,P2,P3,P4,P5,P6,P7,P8,P9,P10};
 //making things tidier                  
-byte key[KEYCOUNT]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
+byte key[]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
     
 //bool test;
 int i;
