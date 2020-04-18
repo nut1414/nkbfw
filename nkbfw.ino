@@ -6,106 +6,114 @@
 #include <Bounce2.h>
 
 //configuration
-#define TURNONLED FALSE //OR TRUE (in capital letter)
+#define HASLED FALSE
+#define LEDCHIPSET WS2812 //see FastLED list of supported chipset
+#define LEDCLORDER GRB
+#define LIGHTLEDONBOOT FALSE
+#define LEDPIN 16
+#define LEDCOUNT 0
 #define TURNONINBUILTLED FALSE
 
 #define STARTSERIAL TRUE
 #define KEYCOUNT 10
 
+//set your key matrix here
+#define XKEYMATRIX 4
+#define YKEYMATRIX 1
+
+//default pin of the switch
+const byte pin[XKEYMATRIX][YKEYMATRIX]=
+  {
+    9,8,10,16
+  };
 
 //default key 
 //change your key binding here
-//if modifier key
-//ex: #define K1 KEY_DOWN_ARROW
-//if normal key
-//ex: #define K1 'F'
-#define K1 '1'
-#define K2 '2'
-#define K3 '3'
-#define K4 '4'
-#define K5 '5'
-#define K6 '6'
-#define K7 '7'
-#define K8 '8'
-#define K9 '9'
-#define K10 '0'
+byte key[XKEYMATRIX][YKEYMATRIX]=
+  {
+    'z','x','c','v'
+  };
 
 
-//default pin of the switch
-#define P1 2
-#define P2 3
-#define P3 A0
-#define P4 4
-#define P5 5
-#define P6 6
-#define P7 7
-#define P8 8
-#define P9 9
-#define P10 10
+//////////////////////////////////////////
 
-CRGB leds[1];
-byte pin[]={P1,P2,P3,P4,P5,P6,P7,P8,P9,P10};
-//making things tidier                  
-byte key[]={K1,K2,K3,K4,K5,K6,K7,K8,K9,K10};
-    
-//bool test;
+
+
+
+
+Bounce button[KEYCOUNT];
+#if HASLED == TRUE
+CRGB leds[LEDCOUNT];
+#endif
+
 int i;
 int j;
-Bounce button[KEYCOUNT];
+int count;
 void setup(){
-//option to disable inbuilt led
- #if TURNONINBUILTLED == FALSE
- pinMode(LED_BUILTIN_TX,INPUT);
- pinMode(LED_BUILTIN_RX,INPUT);
- #endif
- //init led
- 
- FastLED.addLeds<WS2812,16,GRB>(leds,1);
- leds[1]=CRGB::Black;
- FastLED.show();
- #if TURNONLED == TRUE
- //change led color here
- leds[1]=CRGB::Pink;
- FastLED.show();
- #endif
- //check if never been started before
- //planned feature
-
- /*
- if(EEPROM.read(1023)!= 1);
- {
-  
- }                     
- */ 
  //begin keyboard
  Keyboard.begin();
- //attach bounce
-  for (i = 0; i < KEYCOUNT; i++) {
-    button[i] = Bounce();                                     
-    button[i].attach(pin[i], INPUT_PULLUP); 
-    button[i].interval(5);
+ #if STARTSERIAL == TRUE
+  Serial.begin(9600);
+ #endif
+  
+ //option to disable inbuilt led
+ #if TURNONINBUILTLED == FALSE
+  pinMode(LED_BUILTIN, INPUT);
+  pinMode(LED_BUILTIN_TX,INPUT);
+  pinMode(LED_BUILTIN_RX,INPUT);
+ #endif
+ 
+ //init led
+ #if HASLED == TRUE
+  FastLED.addLeds<LEDCHIPSET,LEDPIN,LEDCLORDER>(leds,LEDCOUNT);
+  
+ #if LIGHTLEDONBOOT == TRUE
+ 
+ for (int k = 0;k<LEDCOUNT;k++)
+  {
+   //change led color here
+   leds[k]=CRGB::White;
+   FastLED.show();
   }
+ #endif
+ 
+ #endif
+ 
 
-//start the serial
-#if STARTSERIAL == TRUE
-Serial.begin(9600);
-#endif
+int buttoncount;
+ //attach bounce
+ for (int k = 0; k < YKEYMATRIX ; k++) 
+ {
+  for (int l = 0; l < XKEYMATRIX; l++) 
+  {
+    button[buttoncount] = Bounce();                                     
+    button[buttoncount].attach(pin[l][k], INPUT_PULLUP); 
+    button[buttoncount].interval(5);
+    buttoncount++;
+  }
+ }
+
+
+//no use of the serial as of yet but definetly planned
+
 
 }
 
 void loop() {
-for(i=0;i<KEYCOUNT;i++)
-  {
-  button[i].update();
-  if (button[i].fell()){
-    Keyboard.press(key[i]);
-
-  }
-  if (button[i].rose()){
-    Keyboard.release(key[i]);
-    
-  
-  }
-  }
- 
+ count = 0;
+ for (j = 0; j < YKEYMATRIX; j++) 
+ {
+  for(i = 0; i < XKEYMATRIX; i++)
+    {
+      button[count].update();
+      
+      if (button[count].fell()){
+       Keyboard.press(key[i][j]);
+     }
+      if (button[count].rose()){
+      Keyboard.release(key[i][j]);
+     }
+     count++;
+    }
+ }
 }
