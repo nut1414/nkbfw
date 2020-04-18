@@ -22,9 +22,13 @@
 #define YKEYMATRIX 1
 
 //default pin of the switch
-const byte pin[XKEYMATRIX][YKEYMATRIX]=
+const byte colpin[XKEYMATRIX]=
   {
     9,8,10,16
+  };
+const byte rowpin[YKEYMATRIX]=
+  {
+    NULL
   };
 
 //default key 
@@ -84,10 +88,11 @@ int buttoncount;
  //attach bounce
  for (int k = 0; k < YKEYMATRIX ; k++) 
  {
+  pinMode(rowpin[k],OUTPUT);
   for (int l = 0; l < XKEYMATRIX; l++) 
   {
     button[buttoncount] = Bounce();                                     
-    button[buttoncount].attach(pin[l][k], INPUT_PULLUP); 
+    button[buttoncount].attach(colpin[l], INPUT_PULLUP); 
     button[buttoncount].interval(5);
     buttoncount++;
   }
@@ -103,6 +108,7 @@ void loop() {
  count = 0;
  for (j = 0; j < YKEYMATRIX; j++) 
  {
+  digitalWrite(rowpin[j],HIGH);
   for(i = 0; i < XKEYMATRIX; i++)
     {
       button[count].update();
