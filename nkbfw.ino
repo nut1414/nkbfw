@@ -33,7 +33,7 @@ const uint8_t rowpin[YKEYMATRIX]=
 
 //default key 
 //change your key binding here
-uint8_t key[XKEYMATRIX][YKEYMATRIX]=
+uint8_t defaultkey[XKEYMATRIX][YKEYMATRIX],key[XKEYMATRIX][YKEYMATRIX]=
   {
     'z','x','c','v'
   };
@@ -41,24 +41,21 @@ uint8_t key[XKEYMATRIX][YKEYMATRIX]=
 
 //////////////////////////////////////////
 
-
-
-
-
 Bounce button[KEYCOUNT];
 #if HASLED == TRUE
 CRGB leds[LEDCOUNT];
 #endif
 
-int i;
-int j;
-int count;
+int i,j,count;
+
 void setup(){
+  
  //begin keyboard
  Keyboard.begin();
  #if STARTSERIAL == TRUE
   Serial.begin(9600);
  #endif
+
   
  //option to disable inbuilt led
  #if TURNONINBUILTLED == FALSE
@@ -66,23 +63,25 @@ void setup(){
   pinMode(LED_BUILTIN_TX,INPUT);
   pinMode(LED_BUILTIN_RX,INPUT);
  #endif
+
  
  //init led
  #if HASLED == TRUE
   FastLED.addLeds<LEDCHIPSET,LEDPIN,LEDCLORDER>(leds,LEDCOUNT);
   
- #if LIGHTLEDONBOOT == TRUE
+  #if LIGHTLEDONBOOT == TRUE
  
- for (int k = 0;k<LEDCOUNT;k++)
-  {
+  for (int k = 0;k<LEDCOUNT;k++)
+   {
    //change led color here
-   leds[k]=CRGB::White;
-   FastLED.show();
-  }
- #endif
+    leds[k]=CRGB::White;
+    FastLED.show();
+   }
+  #endif
  
  #endif
  
+
 
 int buttoncount;
  //attach bounce
@@ -97,6 +96,7 @@ int buttoncount;
     buttoncount++;
   }
  }
+
 
 
 //no use of the serial as of yet but definetly planned
