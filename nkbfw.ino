@@ -15,25 +15,25 @@
 #define TURNONINBUILTLED FALSE
 
 #define STARTSERIAL TRUE
-#define KEYCOUNT 10
+#define KEYCOUNT 4
 
 //set your key matrix here
 #define XKEYMATRIX 4
 #define YKEYMATRIX 1
 
 //default pin of the switch
-const byte colpin[XKEYMATRIX]=
+const uint8_t colpin[XKEYMATRIX]=
   {
     9,8,10,16
   };
-const byte rowpin[YKEYMATRIX]=
+const uint8_t rowpin[YKEYMATRIX]=
   {
     NULL
   };
 
 //default key 
 //change your key binding here
-byte key[XKEYMATRIX][YKEYMATRIX]=
+uint8_t key[XKEYMATRIX][YKEYMATRIX]=
   {
     'z','x','c','v'
   };
@@ -121,5 +121,6 @@ void loop() {
      }
      count++;
     }
+   digitalWrite(rowpin[j],LOW);
  }
 }
