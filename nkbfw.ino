@@ -50,16 +50,14 @@ CRGB leds[LEDCOUNT];
 #endif
 String serialstr;
 char parsechar[24],cmd[5];
-int i,j,count,crow,ccol;
-uint8_t ckey;
+int i,j,count,argi1,argi2,argi3;
+uint8_t argb1;
+
 void setup(){
   
  //begin keyboard
 Keyboard.begin();
 Serial.begin(9600);
-
-
- 
 //attach bounce
 int buttoncount;
  for (int k = 0; k < ROWKEYMATRIX ; k++) 
@@ -101,8 +99,6 @@ int buttoncount;
  #endif
  
 
-
-
 }
 
 
@@ -113,14 +109,18 @@ void serialParser(String input)
   input.toCharArray(parsechar,20);
   
   //scan for cmd
-  sscanf(parsechar,"%s %d %d %x",cmd, &ccol, &crow, &ckey);
+  sscanf(parsechar,"%s",cmd);
   
   
   if(strcmp(cmd,"CK")==0)
   {
-   key[ccol][crow] = ckey;
-   Serial.println(key[ccol][crow]);
-   
+   sscanf(parsechar,"%s %d %d %x",cmd,&argi1,&argi2,&argb1);
+   if((argi1<COLKEYMATRIX)||(argi2<ROWKEYMATRIX))
+   {
+   key[argi1][argi2] = argb1;
+   //Serial.println(key[argi1][argi2]);
+   Serial.println("OK");
+   }else Serial.println("INVALID");
   }else if(strcmp(cmd,"DK")==0)
   {
     for (int k = 0; k < ROWKEYMATRIX ; k++) 
@@ -133,6 +133,7 @@ void serialParser(String input)
             
           }
       }
+      Serial.println("OK");
   }else
   {
     Serial.println("INVALID");  
