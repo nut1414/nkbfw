@@ -17,6 +17,7 @@
 
 //#define STARTSERIAL
 #define KEYCOUNT 4
+#define EEPROMSAVE
 //eeprom location for storing key byte
 #define EEPROMLK 100
 //eeprom location for checking first time write
@@ -46,8 +47,6 @@ uint8_t key[COLKEYMATRIX][ROWKEYMATRIX],defaultkey[COLKEYMATRIX][ROWKEYMATRIX]=
 
 //////////////////////////////////////////
 
-
-
 Bounce button[KEYCOUNT];
 #ifdef HASLED 
 CRGB leds[LEDCOUNT];
@@ -65,13 +64,13 @@ Keyboard.begin();
 Serial.begin(9600);
 
 //EEPROM writing default if have not written before
-
+#ifdef EEPROMSAVE
 if(EEPROM.read(EEPROMCHK) == 255)
   {
     EEPROM.write(EEPROMCHK, 127);
     firstc=true;
   }
-
+#endif
 
 
 //attach bounce
@@ -82,12 +81,13 @@ int buttoncount;
   pinMode(rowpin[k],OUTPUT);
   for (int l = 0; l < COLKEYMATRIX; l++) 
   {
-    
+    key[l][k] = defaultkey[l][k];
     button[buttoncount] = Bounce();                                     
     button[buttoncount].attach(colpin[l], INPUT_PULLUP); 
     button[buttoncount].interval(5);
     //do read/write eeproms
     //for the first boot
+    #ifdef EEPROMSAVE
     if (firstc==true)
     {
       //if the key that is already been written isn't the same as the default, overwrite the key
@@ -97,6 +97,7 @@ int buttoncount;
       }
     }
     key[l][k] = EEPROM.read(EEPROMLK+buttoncount);
+    #endif
     buttoncount++;
   }
  }
@@ -124,74 +125,10 @@ firstc==false;
     FastLED.show();
    }
   #endif
- 
  #endif
- 
-
 }
 
 
-//parsing the serial input
-void serialParser(String input)
-{
-  //converting serial.tostring to char array
-  input.toCharArray(parsechar,20);
-  
-  //scan for cmd
-  sscanf(parsechar,"%s",cmd);
-  
-  
-  if(strcmp(cmd,"CK")==0)
-   {
-   sscanf(parsechar,"%s %d %d %x",cmd,&argi1,&argi2,&argb1);
-   //making sure to not setting unknown key loc
-   if((argi1<COLKEYMATRIX)||(argi2<ROWKEYMATRIX))
-   {
-   key[argi1][argi2] = argb1;
-   //Serial.println(key[argi1][argi2]);
-   Serial.println("OK");
-   }else Serial.println("INVALID");
-  }else if(strcmp(cmd,"DK")==0)
-  {
-    for (int k = 0; k < ROWKEYMATRIX ; k++) 
-      {
-        
-        for (int l = 0; l < COLKEYMATRIX; l++) 
-          {
-            
-            key[l][k] = defaultkey[l][k];
-            
-          }
-      }
-      Serial.println("OK");
-  }else if(strcmp(cmd,"SK")==0)
-  {
-    int b= 0;
-   
-    for (int k = 0; k < ROWKEYMATRIX ; k++) 
-    {
-     for (int l = 0; l < COLKEYMATRIX; l++) 
-     {
-      //if the key that is already been written isn't the same as the default, overwrite the key
-      if (EEPROM.read(EEPROMLK+b)!=key[l][k])
-      {
-      EEPROM.write(EEPROMLK+b,key[l][k]);
-      Serial.println("CHANGE");
-      Serial.println(EEPROM.read(EEPROMLK+b));
-      Serial.println("LOC");
-      Serial.println(EEPROMLK+b);
-      }
-      b++;
-     }
-    
-   } Serial.println("OK");
- }else Serial.println("INVALID");
-   
-  
-  
-  
-  
-}
 
 void loop() {
  count = 0;
@@ -223,4 +160,76 @@ void loop() {
     serialParser(serialstr);
  }
 
+}
+
+//parsing the serial input
+
+void serialParser(String input)
+{
+  //converting serial.tostring to char array
+  input.toCharArray(parsechar,20);
+  
+  //scan for cmd
+  sscanf(parsechar,"%s",cmd);
+  
+  
+  if(strcmp(cmd,"CK")==0)
+   {
+    
+   sscanf(parsechar,"%s %d %d %x",cmd,&argi1,&argi2,&argb1);
+   //making sure to not setting unknown key loc
+   if((argi1<COLKEYMATRIX)||(argi2<ROWKEYMATRIX))
+   {
+   key[argi1][argi2] = argb1;
+   //Serial.println(key[argi1][argi2]);
+   Serial.println("OK");
+   }else Serial.println("INVALID");
+   
+  }else if(strcmp(cmd,"DK")==0)
+  {
+    
+    for (int k = 0; k < ROWKEYMATRIX ; k++) 
+      {
+        
+        for (int l = 0; l < COLKEYMATRIX; l++) 
+          {
+            
+            key[l][k] = defaultkey[l][k];
+            
+          }
+      }
+      Serial.println("OK");
+      
+  }else if(strcmp(cmd,"SK")==0)
+  {
+    
+    #ifdef EEPROMSAVE
+    int b= 0;
+   
+    for (int k = 0; k < ROWKEYMATRIX ; k++) 
+    {
+     for (int l = 0; l < COLKEYMATRIX; l++) 
+     {
+      //if the key that is already been written isn't the same as the default, overwrite the key
+      if (EEPROM.read(EEPROMLK+b)!=key[l][k])
+      {
+      EEPROM.write(EEPROMLK+b,key[l][k]);
+      Serial.println("CHANGE");
+      Serial.println(EEPROM.read(EEPROMLK+b));
+      Serial.println("LOC");
+      Serial.println(EEPROMLK+b);
+      }
+      b++;
+     }
+    
+    }
+    #endif 
+    Serial.println("OK");
+    
+ }else Serial.println("INVALID");
+   
+  
+  
+  
+  
 }
