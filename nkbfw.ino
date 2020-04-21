@@ -60,7 +60,7 @@ int i,j,count;
 bool firstc = false;
 
 void setup(){
-  //EEPROM writing default if have not written before
+  //writing EEPROM default if have not written before
   #ifdef EEPROMSAVE
 if(EEPROM.read(EEPROMCHK) == 255)
   {
@@ -87,8 +87,12 @@ if(EEPROM.read(EEPROMCHK) == 255)
         leds[k][l]=EEPROM.read(EEPROMLK+EEPROMLED+l);
       }
       
-    }
-    
+    }else{
+    for (int l= 0 ; l<3;l++)
+      {
+        leds[k][l]=EEPROM.read(EEPROMLK+EEPROMLED+l);
+      }
+      }
     FastLED.show();
    }
   
@@ -98,7 +102,6 @@ if(EEPROM.read(EEPROMCHK) == 255)
 //begin keyboard
 Keyboard.begin();
 Serial.begin(9600);
-
 
 
 //attach bounce
@@ -130,7 +133,9 @@ int buttoncount;
   }
  }
 
+
  firstc=false;
+
   
  //option to disable inbuilt led
  #ifdef TURNOFFINBUILTLED
@@ -174,6 +179,8 @@ void loop() {
  FastLED.show();
 #endif
 }
+
+
 
 //parsing the serial input
 void serialParser(String input)
