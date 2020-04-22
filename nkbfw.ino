@@ -293,6 +293,14 @@ void serialParser(String input)
     #endif
       Serial.println("OK");
       
+  }else if(strcmp(cmd,"IN")==0)
+  {
+    Serial.print("KEY ");
+    Serial.print(KEYCOUNT);
+    Serial.print(" COL ");
+    Serial.print(COLKEYMATRIX);
+    Serial.print(" ROW ");
+    Serial.println(ROWKEYMATRIX);
   }else Serial.println("INVALID");
    
 }
