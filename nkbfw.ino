@@ -115,7 +115,7 @@ int buttoncount;
     key[l][k] = defaultkey[l][k];
     button[buttoncount] = Bounce();                                     
     button[buttoncount].attach(colpin[l], INPUT_PULLUP); 
-    button[buttoncount].interval(5);
+    button[buttoncount].interval(1);
     //do read/write eeproms
     //for the first boot
     #ifdef EEPROMSAVE
