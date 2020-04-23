@@ -11,7 +11,7 @@
 #define LEDCHIPSET WS2812   //see FastLED list of supported chipset
 #define LEDCLORDER GRB
 #define LEDPIN 17
-#define LEDCOUNT 1  //NEVER under any circumstance set led count to 0, this will crash the board and you have to ground the reset pin in order to upload any code again.
+#define LEDCOUNT 1  //NEVER under any circumstance set led count to 0, this will crash the board and you have to ground the reset pin in order to upload any code again. (has led only)
 #define DEFAULTR 255
 #define DEFAULTG 192
 #define DEFAULTB 203
@@ -45,8 +45,10 @@ uint8_t key[COLKEYMATRIX][ROWKEYMATRIX],defaultkey[COLKEYMATRIX][ROWKEYMATRIX]=
 
 
 //////////////////////////////////////////
+#ifdef HASLED
 #if LEDCOUNT <= 0
 #define LEDCOUNT 1 //NEVER under any circumstance set led count to 0, this will crash the board and you have to ground the reset pin in order to upload any code again.
+#endif
 #endif
 Bounce button[KEYCOUNT];
 #ifdef HASLED 
@@ -295,12 +297,20 @@ void serialParser(String input)
       
   }else if(strcmp(cmd,"IN")==0)
   {
-    Serial.print("KEY ");
+    Serial.print("KEY,");
+    Serial.print("COL,");
+    Serial.print("ROW, ");
+    Serial.println("LED, ");
     Serial.print(KEYCOUNT);
-    Serial.print(" COL ");
+    Serial.print(",");
     Serial.print(COLKEYMATRIX);
-    Serial.print(" ROW ");
-    Serial.println(ROWKEYMATRIX);
+    Serial.print(",");
+    Serial.print(ROWKEYMATRIX);
+    Serial.print(",");
+    Serial.print(LEDCOUNT);
+    Serial.println(",");
+    
+    
   }else Serial.println("INVALID");
    
 }
