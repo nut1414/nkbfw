@@ -311,6 +311,9 @@ void serialParser(String input)
     Serial.println(",");
     
     
+  }else if(strcmp(cmd,"PG")==0)
+  {
+    Serial.println(1);
   }else Serial.println("INVALID");
+  }
    
-}
