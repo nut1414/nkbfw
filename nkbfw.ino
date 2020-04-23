@@ -24,8 +24,8 @@
 
 /*set your key matrix here*/
 #define COLKEYMATRIX 4
-#define ROWKEYMATRIX 1
-#define KEYCOUNT 4
+#define ROWKEYMATRIX 2
+#define KEYCOUNT 8
 
 /*default pin of the switch*/
 const uint8_t colpin[COLKEYMATRIX]=
@@ -34,14 +34,15 @@ const uint8_t colpin[COLKEYMATRIX]=
   };
 const uint8_t rowpin[ROWKEYMATRIX]=
   {
-    NULL
+    NULL,NULL
   };
 
 /*default key change your key binding here*/
-uint8_t key[COLKEYMATRIX][ROWKEYMATRIX],defaultkey[COLKEYMATRIX][ROWKEYMATRIX]=
-  {
-    'z','x','c','v'
-  };
+uint8_t key[ROWKEYMATRIX][COLKEYMATRIX];
+uint8_t defaultkey[ROWKEYMATRIX][COLKEYMATRIX]={
+   {'z','x','c','v'},
+    {'1','2','3','4'}
+};
 
 
 //////////////////////////////////////////
@@ -116,7 +117,7 @@ int buttoncount;
   pinMode(rowpin[k],OUTPUT);
   for (int l = 0; l < COLKEYMATRIX; l++) 
   {
-    key[l][k] = defaultkey[l][k];
+    key[k][l] = defaultkey[k][l];
     button[buttoncount] = Bounce();                                     
     button[buttoncount].attach(colpin[l], INPUT_PULLUP); 
     button[buttoncount].interval(1);
@@ -126,12 +127,12 @@ int buttoncount;
     if (firstc==true)
     {
       //if the key that is already been written isn't the same as the default, overwrite the key
-      if (EEPROM.read(EEPROMLK+buttoncount)!=defaultkey[l][k])
+      if (EEPROM.read(EEPROMLK+buttoncount)!=defaultkey[k][l])
       {
-      EEPROM.write(EEPROMLK+buttoncount,defaultkey[l][k]);
+      EEPROM.write(EEPROMLK+buttoncount,defaultkey[k][l]);
       }
     }
-    key[l][k] = EEPROM.read(EEPROMLK+buttoncount);
+    key[k][l] = EEPROM.read(EEPROMLK+buttoncount);
     #endif
     buttoncount++;
   }
@@ -163,11 +164,11 @@ void loop() {
       button[count].update();
       
       if (button[count].fell()){
-       Keyboard.press(key[i][j]);
+       Keyboard.press(key[j][i]);
        
      }
       if (button[count].rose()){
-      Keyboard.release(key[i][j]);
+      Keyboard.release(key[j][i]);
      }
      count++;
     }
@@ -206,7 +207,7 @@ void serialParser(String input)
    //making sure to not setting unknown key loc
    if((argi1<COLKEYMATRIX)||(argi2<ROWKEYMATRIX))
    {
-   key[argi1][argi2] = argb1;
+   key[argi2][argi1] = argb1;
    Serial.println("OK");
    }else Serial.println("INVALID");
    
@@ -219,7 +220,7 @@ void serialParser(String input)
         for (int l = 0; l < COLKEYMATRIX; l++) 
           {
             
-            key[l][k] = defaultkey[l][k];
+            key[k][l] = defaultkey[k][l];
             
           }
       }
@@ -236,9 +237,9 @@ void serialParser(String input)
      for (int l = 0; l < COLKEYMATRIX; l++) 
      {
       //if the key that is already been written isn't the same as the default, overwrite the key
-      if (EEPROM.read(EEPROMLK+b)!=key[l][k])
+      if (EEPROM.read(EEPROMLK+b)!=key[k][l])
       {
-       EEPROM.write(EEPROMLK+b,key[l][k]);
+       EEPROM.write(EEPROMLK+b,key[k][l]);
        Serial.println("CHANGE");
        Serial.println(EEPROM.read(EEPROMLK+b));
        Serial.println("LOC");
@@ -331,6 +332,33 @@ void serialParser(String input)
   }else if(strcmp(cmd,"PG")==0)
   {
     Serial.println(1);
+  }else if(strcmp(cmd,"KI")==0)
+  {
+    int count=0;
+    for (int k = 0; k < ROWKEYMATRIX ; k++) 
+      {
+        
+        for (int l = 0; l < COLKEYMATRIX; l++) 
+          {
+            
+            if((l == COLKEYMATRIX - 1)&&(k == ROWKEYMATRIX -1))
+            {
+            Serial.print(key[k][l]);
+            Serial.println("|");
+            }else if((l == COLKEYMATRIX - 1)&&(count == k))
+            {
+             count++;
+             Serial.print(key[k][l]);
+             Serial.print("|");
+            }
+            else{
+            Serial.print(key[k][l]);
+            Serial.print(",");
+            }
+            
+            
+          }
+      }
   }else Serial.println("INVALID");
   }
    
