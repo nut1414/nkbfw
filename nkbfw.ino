@@ -299,8 +299,8 @@ void serialParser(String input)
   {
     Serial.print("KEY,");
     Serial.print("COL,");
-    Serial.print("ROW, ");
-    Serial.println("LED, ");
+    Serial.print("ROW,");
+    Serial.println("LED,");
     Serial.print(KEYCOUNT);
     Serial.print(",");
     Serial.print(COLKEYMATRIX);
