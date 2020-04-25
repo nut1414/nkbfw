@@ -205,12 +205,13 @@ void serialParser(String input)
   if(strcmp(cmd,"CK")==0)
    {
     //change key
-    //arg1 = X in the matrix, arg2 = Y in the matrix, argb1 is the letter you want to replace in hexadecimal (look up 'ASCII Table')
-   sscanf(parsechar,"%s %d %d %x",cmd,&argi1,&argi2,&argb1);
+    //arg1 = X in the matrix, arg2 = Y in the matrix, argi3 is ascii decimal formatted key (look up 'ASCII Table')
+   sscanf(parsechar,"%s %d %d %d",cmd,&argi1,&argi2,&argi3);
    //making sure to not setting unknown key loc
    if((argi1<COLKEYMATRIX)||(argi2<ROWKEYMATRIX))
    {
-   key[argi2][argi1] = argb1;
+   uint8_t argb = argi3;
+   key[argi2][argi1] = argb;
    Serial.println("OK");
    }else Serial.println("INVALID");
    
