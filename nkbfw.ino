@@ -8,6 +8,7 @@
 /*configuration*/
 
 //#define HASLED 
+#define HASLED
 #define LEDCHIPSET WS2812   //see FastLED list of supported chipset
 #define LEDCLORDER GRB
 #define LEDPIN 2
@@ -233,6 +234,7 @@ void serialParser(String input)
   }else if(strcmp(cmd,"SS")==0)
   {
     //save
+    bool change = false;
     #ifdef EEPROMSAVE
     int b = 0;
    
@@ -243,11 +245,13 @@ void serialParser(String input)
       //if the key that is already been written isn't the same as the default, overwrite the key
       if (EEPROM.read(EEPROMLK+b)!=key[k][l])
       {
+       change = true;
        EEPROM.write(EEPROMLK+b,key[k][l]);
        Serial.print("CHANGE-");
        Serial.print(EEPROM.read(EEPROMLK+b));
        Serial.print(",LOC-");
        Serial.println(EEPROMLK+b);
+       
       }
       b++;
      }
@@ -261,17 +265,27 @@ void serialParser(String input)
       {
       if (EEPROM.read(EEPROMLK+EEPROMLED+l)!=leds[k][l])
         {
+         change = true;
         EEPROM.write(EEPROMLK+EEPROMLED+l,leds[k][l]);
         Serial.print("CHANGE-");
         Serial.print(EEPROM.read(EEPROMLK+EEPROMLED+l));
         Serial.print(",LOC-");
-        Serial.println(EEPROMLK+b);
+        Serial.print(EEPROMLK+EEPROMLED+l);
+        if (l<2)
+        {
+        Serial.print("|");
+        }
+        else
+        Serial.println("");
+        
         }
       }
     }
     #endif
     #endif 
-    Serial.println("OK");
+    if(change==false){
+      Serial.println("OK");
+      }
     
   }else if(strcmp(cmd,"LC")==0)
   {
@@ -323,7 +337,7 @@ void serialParser(String input)
     Serial.print("|");
     Serial.print(leds[0].g);
     Serial.print("|");
-    Serial.print(leds[0].B);
+    Serial.print(leds[0].b);
     Serial.print(",");
     #else
     Serial.print(0);
