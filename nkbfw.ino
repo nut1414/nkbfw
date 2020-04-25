@@ -8,7 +8,7 @@
 /*configuration*/
 
 //#define HASLED 
-#define HASLED
+//#define HASLED
 #define LEDCHIPSET WS2812   //see FastLED list of supported chipset
 #define LEDCLORDER GRB
 #define LEDPIN 2
@@ -27,8 +27,8 @@
 
 /*set your key matrix here*/
 #define COLKEYMATRIX 4
-#define ROWKEYMATRIX 2
-#define KEYCOUNT 8
+#define ROWKEYMATRIX 1
+#define KEYCOUNT 4
 
 /*default pin of the switch*/
 const uint8_t colpin[COLKEYMATRIX]=
@@ -37,14 +37,13 @@ const uint8_t colpin[COLKEYMATRIX]=
   };
 const uint8_t rowpin[ROWKEYMATRIX]=
   {
-    NULL,NULL
+    NULL
   };
 
 /*default key change your key binding here*/
 uint8_t key[ROWKEYMATRIX][COLKEYMATRIX];
 uint8_t defaultkey[ROWKEYMATRIX][COLKEYMATRIX]={
-   {'z','x','c','v'},
-    {'1','2','3','4'}
+   {'z','x','c','v'}
 };
 
 
