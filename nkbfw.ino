@@ -10,12 +10,14 @@
 //#define HASLED 
 #define LEDCHIPSET WS2812   //see FastLED list of supported chipset
 #define LEDCLORDER GRB
-#define LEDPIN 17
+#define LEDPIN 2
 #define LEDCOUNT 1  //NEVER under any circumstance set led count to 0, this will crash the board and you have to ground the reset pin in order to upload any code again. (has led only)
 #define DEFAULTR 255
 #define DEFAULTG 192
 #define DEFAULTB 203
 #define TURNOFFINBUILTLED
+
+#define NAME "Keypad"
 
 #define EEPROMSAVE
 #define EEPROMLK 100 //eeprom location for storing key byte
@@ -56,9 +58,11 @@ uint8_t defaultkey[ROWKEYMATRIX][COLKEYMATRIX]={
 Bounce button[KEYCOUNT];
 #ifdef HASLED 
 CRGBArray<LEDCOUNT> leds;
+
 const int drgb[]{DEFAULTR,DEFAULTG,DEFAULTB};
 #endif
 String serialstr;
+const char devicename[] = {NAME};
 char parsechar[24],cmd[5];
 int i,j,count;
 
@@ -77,7 +81,6 @@ if(EEPROM.read(EEPROMCHK) == 255)
 //init led
  #ifdef HASLED 
   FastLED.addLeds<LEDCHIPSET,LEDPIN,LEDCLORDER>(leds,LEDCOUNT);
-  
   for (int k = 0;k<LEDCOUNT;k++)
    {
    
@@ -304,7 +307,8 @@ void serialParser(String input)
     Serial.print("COL,");
     Serial.print("ROW,");
     Serial.print("LED,");
-    Serial.println("RGB,");
+    Serial.print("RGB,");
+    Serial.println("NAME,");
     Serial.print(KEYCOUNT);
     Serial.print(",");
     Serial.print(COLKEYMATRIX);
@@ -319,15 +323,17 @@ void serialParser(String input)
     Serial.print(leds[0].g);
     Serial.print("|");
     Serial.print(leds[0].B);
-    Serial.println(",");
+    Serial.print(",");
     #else
     Serial.print(0);
     Serial.print("|");
     Serial.print(0);
     Serial.print("|");
     Serial.print(0);
-    Serial.println(",");
+    Serial.print(",");
     #endif
+    Serial.print(devicename);
+    Serial.println(",");
     
   }else if(strcmp(cmd,"PG")==0)
   {
@@ -356,9 +362,9 @@ void serialParser(String input)
             Serial.print(",");
             }
             
-            
           }
       }
-  }else Serial.println("INVALID");
+  }
+  else Serial.println("INVALID");
   }
    
