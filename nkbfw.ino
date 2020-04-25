@@ -244,9 +244,9 @@ void serialParser(String input)
       if (EEPROM.read(EEPROMLK+b)!=key[k][l])
       {
        EEPROM.write(EEPROMLK+b,key[k][l]);
-       Serial.println("CHANGE");
-       Serial.println(EEPROM.read(EEPROMLK+b));
-       Serial.println("LOC");
+       Serial.print("CHANGE-");
+       Serial.print(EEPROM.read(EEPROMLK+b));
+       Serial.print(",LOC-");
        Serial.println(EEPROMLK+b);
       }
       b++;
@@ -262,9 +262,9 @@ void serialParser(String input)
       if (EEPROM.read(EEPROMLK+EEPROMLED+l)!=leds[k][l])
         {
         EEPROM.write(EEPROMLK+EEPROMLED+l,leds[k][l]);
-        Serial.println("CHANGE");
-        Serial.println(EEPROM.read(EEPROMLK+EEPROMLED+l));
-        Serial.println("LOC");
+        Serial.print("CHANGE-");
+        Serial.print(EEPROM.read(EEPROMLK+EEPROMLED+l));
+        Serial.print(",LOC-");
         Serial.println(EEPROMLK+b);
         }
       }
