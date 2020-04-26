@@ -6,9 +6,6 @@
 #include <Bounce2.h>
 #include "Configuration.h"
 
-
-
-
 //////////////////////////////////////////
 #ifdef HASLED
 #if LEDCOUNT <= 0
@@ -211,7 +208,18 @@ void serialParser(String input)
        Serial.print("CHANGE-");
        Serial.print(EEPROM.read(EEPROMLK+b));
        Serial.print(",LOC-");
-       Serial.println(EEPROMLK+b);
+       Serial.print(EEPROMLK+b);
+       
+       if ((l==COLKEYMATRIX-1) && (k==ROWKEYMATRIX-1))
+        {
+        Serial.println("");
+        }
+       else if((l<COLKEYMATRIX-1) || (k<ROWKEYMATRIX-1))
+       {
+       Serial.print("|");
+       }
+        else
+        Serial.println("");
        
       }
       b++;
