@@ -33,8 +33,13 @@ const uint8_t rowpin[ROWKEYMATRIX]=
     NULL
   };
 
-/*default key change your key binding here*/
+/*
+default key change your key binding here
+if using modifier enter with out bracket 
+example: "{KEY_LEFT_SHIFT}"
+
+*/
 uint8_t key[ROWKEYMATRIX][COLKEYMATRIX];
 uint8_t defaultkey[ROWKEYMATRIX][COLKEYMATRIX]={
-   {'z','x','c','v'}
+   {KEY_LEFT_SHIFT,'x','c','v'}
 };
