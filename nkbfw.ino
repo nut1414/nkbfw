@@ -6,7 +6,11 @@
 #include <Bounce2.h>
 #include "Configuration.h"
 
+
+#define SERIALVERSION 1
+
 //////////////////////////////////////////
+
 #ifdef HASLED
 #if LEDCOUNT <= 0
 #define LEDCOUNT 1 //NEVER under any circumstance set led count to 0, this will crash the board and you have to ground the reset pin in order to upload any code again.
@@ -14,12 +18,14 @@
 #else
 #define LEDCOUNT 0
 #endif
-Bounce button[KEYCOUNT];
+
+
 #ifdef HASLED 
 CRGBArray<LEDCOUNT> leds;
-
 const int drgb[]{DEFAULTR,DEFAULTG,DEFAULTB};
 #endif
+
+Bounce button[KEYCOUNT];
 String serialstr;
 const char devicename[] = {NAME};
 char parsechar[24],cmd[5];
@@ -40,24 +46,24 @@ if(EEPROM.read(EEPROMCHK) == 255)
 //init led
  #ifdef HASLED 
   FastLED.addLeds<LEDCHIPSET,LEDPIN,LEDCLORDER>(leds,LEDCOUNT);
-  for (int k = 0;k<LEDCOUNT;k++)
+  for (int k = 0;k < LEDCOUNT;k++)
    {
    
     if (firstc==true)
     {
-      for (int l= 0 ; l<3;l++)
+      for (int l = 0 ; l<3;l++)
       {
       if (EEPROM.read(EEPROMLK+EEPROMLED+l)!=drgb[l])
         {
         EEPROM.write(EEPROMLK+EEPROMLED+l,drgb[l]);
         }
-        leds[k][l]=EEPROM.read(EEPROMLK+EEPROMLED+l);
+        leds[k][l] = EEPROM.read(EEPROMLK+EEPROMLED+l);
       }
       
     }else{
-    for (int l= 0 ; l<3;l++)
+    for (int l = 0 ; l<3;l++)
       {
-        leds[k][l]=EEPROM.read(EEPROMLK+EEPROMLED+l);
+        leds[k][l] = EEPROM.read(EEPROMLK+EEPROMLED+l);
       }
       }
     FastLED.show();
@@ -218,8 +224,8 @@ void serialParser(String input)
        {
        Serial.print("|");
        }
-        else
-        Serial.println("");
+       else
+       Serial.println("");
        
       }
       b++;
@@ -230,7 +236,7 @@ void serialParser(String input)
   #ifdef HASLED
     for (int k = 0;k<LEDCOUNT;k++)
     {
-      for (int l= 0 ; l<3;l++)
+      for (int l = 0 ; l<3;l++)
       {
       if (EEPROM.read(EEPROMLK+EEPROMLED+l)!=leds[k][l])
         {
@@ -250,7 +256,8 @@ void serialParser(String input)
         }
       }
     }
-    #endif
+  #endif
+    
     #endif 
     if(change==false){
       Serial.println("OK");
@@ -321,7 +328,9 @@ void serialParser(String input)
     
   }else if(strcmp(cmd,"PG")==0)
   {
-    Serial.println(1);
+    
+    Serial.println(SERIALVERSION);
+    
   }else if(strcmp(cmd,"KI")==0)
   {
     int count=0;
