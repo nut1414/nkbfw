@@ -6,7 +6,7 @@
 #include <Bounce2.h>
 #include "Configuration.h"
 
-
+#define KEYCOUNT COLKEYMATRIX*ROWKEYMATRIX
 #define SERIALVERSION 1
 
 //////////////////////////////////////////
@@ -111,7 +111,7 @@ int buttoncount;
 
   
  //option to disable inbuilt led
- #ifdef TURNOFFINBUILTLED
+ #ifdef TURNOFFBUILTINLED
   pinMode(LED_BUILTIN, INPUT);
   pinMode(LED_BUILTIN_TX,INPUT);
   pinMode(LED_BUILTIN_RX,INPUT);

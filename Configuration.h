@@ -9,7 +9,7 @@
 #define DEFAULTR 255
 #define DEFAULTG 192
 #define DEFAULTB 203
-#define TURNOFFINBUILTLED
+#define TURNOFFBUILTINLED
 
 #define NAME "Keypad"
 
@@ -21,7 +21,7 @@
 /*set your key matrix here*/
 #define COLKEYMATRIX 4
 #define ROWKEYMATRIX 1
-#define KEYCOUNT 4
+
 
 /*default pin of the switch*/
 const uint8_t colpin[COLKEYMATRIX]=
@@ -37,9 +37,11 @@ const uint8_t rowpin[ROWKEYMATRIX]=
 default key change your key binding here
 if using modifier enter with out bracket 
 example: "{KEY_LEFT_SHIFT,'x','c'}"
-
+enter NULL for each empty key
+example: "{'A',NULL,'x','c'}"
 */
 uint8_t key[ROWKEYMATRIX][COLKEYMATRIX];
 uint8_t defaultkey[ROWKEYMATRIX][COLKEYMATRIX]={
    {'z','x','c','v'}
+   
 };
