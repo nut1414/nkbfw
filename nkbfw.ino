@@ -124,7 +124,7 @@ void loop() {
  count = 0;
  for (j = 0; j < ROWKEYMATRIX; j++) 
  {
-  digitalWrite(rowpin[j],HIGH);
+  digitalWrite(rowpin[j],LOW);
   
   for(i = 0; i < COLKEYMATRIX; i++)
     {
@@ -140,7 +140,7 @@ void loop() {
      }
      count++;
     }
-   digitalWrite(rowpin[j],LOW);
+   digitalWrite(rowpin[j],HIGH);
  }
  
  while (Serial.available() > 0) 
